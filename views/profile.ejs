@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="../stylesheets/profile.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/feed">Feed Page</a>
+      <a href="/restaurant">Get some food</a>
+      <a href="/logout">Log Out</a>
+    </nav>
+
+    <div class="profile-container">
+      <div class="profile-header">
+        <h1>Welcome <%= username %></h1>
+        <!-- <img
+          src="../images/pexels-cottonbro-studio-6255509.jpg"
+          alt="Profile Photo"
+        /> -->
+        <img src="<%= profilePicture %>" alt="Profile Photo" />
+      </div>
+
+      <div class="profile-section">
+        <h2>About Me</h2>
+        <p>
+          Hi, I'm Your Name! I love exploring the world of creativity and
+          sharing my inspirations with others. Join me on my journey of
+          discovery and let's create something beautiful together.
+        </p>
+      </div>
+
+      <div class="profile-section">
+        <h2>Contact Information</h2>
+        <ul>
+          <li><strong>Email:</strong> <%= email %></li>
+          <li><strong>Location:</strong> [City, Country]</li>
+          <li>
+            <strong>Website/Blog:</strong>
+            <a href="[Your Blog/Website URL]">Your Blog/Website</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Add more sections as needed -->
+    </div>
+  </body>
+</html>
