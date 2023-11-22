@@ -15,7 +15,7 @@
 
     <div class="profile-container">
       <div class="profile-header">
-        <h1>Welcome <%= username %></h1>
+        <h1>Welcome <%= user.username %></h1>
         <!-- <img
           src="../images/pexels-cottonbro-studio-6255509.jpg"
           alt="Profile Photo"
@@ -30,12 +30,19 @@
           sharing my inspirations with others. Join me on my journey of
           discovery and let's create something beautiful together.
         </p>
+        <!-- Multer setup -->
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <input type="text" name="filecaption" id="" placeholder="Some caption Here">
+          <input type="file" name="file" />
+          <button type="submit">submit</button>
+        </form>
+        <!-- Multer End -->
       </div>
 
       <div class="profile-section">
         <h2>Contact Information</h2>
         <ul>
-          <li><strong>Email:</strong> <%= email %></li>
+          <li><strong>Email:</strong> <%= user.email %></li>
           <li><strong>Location:</strong> [City, Country]</li>
           <li>
             <strong>Website/Blog:</strong>
@@ -43,8 +50,22 @@
           </li>
         </ul>
       </div>
-
-      <!-- Add more sections as needed -->
+      </div>
     </div>
+    <!-- Add more sections as needed -->
+    <div class="post-container">
+      <div class="cards flex">
+        <% user.posts.forEach(function(post) { %>
+          <div class="post">
+            <img src="./images/uploads/<%= post.image %>" alt="Post Image" />
+            <h2><%= post.imageText %></h2>
+            <p><%= post.imageText %></p>
+          </div>
+        <% }); %>
+      </div>
+     
+    </div>
+
+      <!-- Add more posts as needed -->
   </body>
 </html>

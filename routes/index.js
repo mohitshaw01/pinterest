@@ -8,6 +8,7 @@ passport.use(new localStrategy(userModel.authenticate()));
 const fs = require("fs");
 const path = require("path");
 const { error } = require("console");
+const upload = require("./multer");
 
 /* GET home page. */
 router.get("/", function (req, res) {
@@ -18,13 +19,14 @@ router.get("/feed", isLoggedIn, function (req, res) {
   res.render("feedPage");
 });
 
-router.get("/profile", isLoggedIn, async function (req, res, next) {
+router.get("/profile", async function (req, res, next) {
   try {
-    // Assuming the username is stored in the session
-    const username = req.user.username;
-
     // Fetch the user from the database by username
-    const user = await userModel.findOne({ username });
+    const user = await userModel
+      .findOne({
+        username: req.session.passport.user,
+      })
+      .populate("posts");
 
     // Check if the user exists
     if (!user) {
@@ -43,9 +45,8 @@ router.get("/profile", isLoggedIn, async function (req, res, next) {
 
     // Pass the user's information to the profile view
     res.render("profile", {
-      username: user.username,
-      email: user.email,
       profilePicture,
+      user,
     });
   } catch (err) {
     console.error(err);
@@ -56,6 +57,32 @@ router.get("/profile", isLoggedIn, async function (req, res, next) {
 router.get("/login", function (req, res, next) {
   res.render("login", { error: req.flash("error") });
 });
+// Multer
+router.post(
+  "/upload",
+  isLoggedIn,
+  upload.single("file"),
+  async function (req, res) {
+    if (!req.file) {
+      return res.status(404).send("file not uploaded successfully");
+    }
+    // res.send("File uploaded successfully");
+    const user = await userModel.findOne({
+      username: req.session.passport.user,
+    });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    const postData = await postModel.create({
+      image: req.file.filename,
+      imageText: req.body.filecaption,
+      user: user._id,
+    });
+    user.posts.push(postData._id);
+    await user.save();
+    res.redirect("/profile");
+  }
+);
 
 //  passport auth code
 router.post("/register", function (req, res) {
