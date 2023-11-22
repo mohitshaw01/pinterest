@@ -7,10 +7,15 @@ const localStrategy = require("passport-local");
 passport.use(new localStrategy(userModel.authenticate()));
 const fs = require("fs");
 const path = require("path");
+const { error } = require("console");
 
 /* GET home page. */
 router.get("/", function (req, res) {
   res.render("index");
+});
+
+router.get("/feed", isLoggedIn, function (req, res) {
+  res.render("feedPage");
 });
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
@@ -49,7 +54,7 @@ router.get("/profile", isLoggedIn, async function (req, res, next) {
 });
 
 router.get("/login", function (req, res, next) {
-  res.render("login");
+  res.render("login", { error: req.flash("error") });
 });
 
 //  passport auth code
@@ -76,6 +81,7 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/profile",
     failureRedirect: "/login",
+    failureFlash: true,
   })
 );
 

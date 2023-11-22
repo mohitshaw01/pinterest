@@ -16,6 +16,13 @@
           class="img1"
         />
         <p class="header">Create account in to see more</p>
+
+        <!--  flash messages -->
+        <% if(error.length > 0){ %>
+          <p class="error"><%= error %></p>
+        <% } %>
+      
+          <!--  -->
         <form action="/login" method="post">
           <input
             type="text"
